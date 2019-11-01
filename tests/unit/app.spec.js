@@ -15,4 +15,14 @@ describe('App.vue', () => {
     await store.dispatch('checkHealth');
     expect(store.getters.mainState).toBe(MainState.OFFLINE);
   });
+
+  it('check app ready state', async () => {
+    mock.onGet(`${store.getters.serviceUrl}/health`).reply(200,
+      {
+        'status': 'ok'
+      });
+
+    await store.dispatch('checkHealth');
+    expect(store.getters.mainState).toBe(MainState.READY);
+  });
 })

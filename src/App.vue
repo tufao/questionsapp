@@ -2,7 +2,8 @@
   <div id="app">
     <div class="server-online-status" :class="{'status-on': isOnline, 'status-off': !isOnline}">Server </div>
     <LoadingScreen v-if="mainState==MainState.LOADING" msg="Loading..."/>
-    <ErrorScreen v-if="mainState==MainState.OFFLINE" msg="Its not possible to reach server, please try again later." />
+    <ErrorScreen v-else-if="mainState==MainState.OFFLINE" msg="Its not possible to reach server, please try again later." />
+    <div v-else>Ready!</div>
   </div>
 </template>
 

@@ -6,7 +6,8 @@ Vue.use(Vuex);
 
 export const MainState = {
   LOADING: 'state_loading',
-  OFFLINE: 'state_offline'
+  OFFLINE: 'state_offline',
+  READY: 'state_ready'
 }
 
 export default new Vuex.Store({
@@ -21,12 +22,17 @@ export default new Vuex.Store({
     },
 
     updateMainState (state) {
+      console.log('test: state before', state.online, state.value);
       switch (state.value) {
         case MainState.LOADING:
-          if (!state.online) {
+        case MainState.OFFLINE:
+          if (state.online) {
+            state.value = MainState.READY;
+          } else {
             state.value = MainState.OFFLINE;
           }
       }
+      console.log('test: state after', state.online, state.value);
     }
   },
   actions: {
