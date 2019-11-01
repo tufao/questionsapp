@@ -14,7 +14,8 @@ export default new Vuex.Store({
   state: {
     value: MainState.LOADING,
     service_url: 'https://private-bbbe9-blissrecruitmentapi.apiary-mock.com/',
-    online: false
+    online: false,
+    questions: []
   },
   mutations: {
     updateConnection (state, value) {
@@ -31,6 +32,10 @@ export default new Vuex.Store({
             state.value = MainState.OFFLINE;
           }
       }
+    },
+
+    updateQuestions (state, questions) {
+      state.questions = questions;
     }
   },
   actions: {
@@ -48,8 +53,22 @@ export default new Vuex.Store({
             context.commit('updateConnection', false);
             context.commit('updateMainState');
             resolve();
+          });
+      });
+    },
+    async fetchQuestions (context) {
+      return new Promise((resolve, reject) => {
+        axios.get(`${context.state.service_url}/questions`)
+          .then((response) => {
+            console.log('store: questions update', response.data);
+            context.commit('updateQuestions', response.data);
+            resolve();
           })
-      })
+          .catch(() => {
+            context.commit('updateQuestions', []);
+            resolve();
+          });
+      });
     }
   },
   modules: {
@@ -57,6 +76,7 @@ export default new Vuex.Store({
   getters: {
     serviceUrl: (state) => state.service_url,
     isOnline: (state) => state.online,
-    mainState: (state) => state.value
+    mainState: (state) => state.value,
+    questions: (state) => state.questions
   }
 })
