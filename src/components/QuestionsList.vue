@@ -1,6 +1,5 @@
 <template>
   <div class="questions">
-      <div>Questions:</div>
       <div v-for="(item, index) in list" :key="item.id">{{ index + 1}}. {{ item.question }}</div>
   </div>
 </template>

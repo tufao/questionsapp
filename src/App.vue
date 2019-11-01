@@ -5,7 +5,7 @@
     <ErrorScreen v-else-if="mainState==MainState.OFFLINE"
       msg="Its not possible to reach server, please try again later."
       v-on:retry="retryConnect" />
-    <QuestionsList v-else :list="questions" />
+    <QuestionsScreen v-else :list="questions" />
   </div>
 </template>
 
@@ -13,7 +13,7 @@
 import { mapGetters } from 'vuex'
 import { MainState } from './store';
 import ErrorScreen from './components/ErrorScreen.vue'
-import QuestionsList from './components/QuestionsList.vue'
+import QuestionsScreen from './components/QuestionsScreen.vue'
 import LoadingScreen from './components/LoadingScreen.vue'
 
 export default {
@@ -27,7 +27,7 @@ export default {
 
   components: {
     LoadingScreen,
-    QuestionsList,
+    QuestionsScreen,
     ErrorScreen
   },
 
