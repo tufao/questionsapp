@@ -11,14 +11,16 @@ export const MainState = {
 
 export default new Vuex.Store({
   state: {
+    value: MainState.LOADING,
     service_url: 'https://private-bbbe9-blissrecruitmentapi.apiary-mock.com/',
-    online: false,
-    value: MainState.LOADING
+    online: false
   },
   mutations: {
-    updateOnlineStatus (state, value) {
+    updateConnection (state, value) {
       state.online = value;
+    },
 
+    updateMainState (state) {
       switch (state.value) {
         case MainState.LOADING:
           if (!state.online) {
@@ -33,12 +35,14 @@ export default new Vuex.Store({
         axios.get(`${context.state.service_url}/health`)
           .then((response) => {
             const isHealthy = response.data && response.data.status === 'ok';
-            context.commit('updateOnlineStatus', isHealthy);
+            context.commit('updateConnection', isHealthy);
+            context.commit('updateMainState');
             resolve();
           })
           .catch((error) => {
             console.log(error.statusText)
-            context.commit('updateOnlineStatus', false);
+            context.commit('updateConnection', false);
+            context.commit('updateMainState');
             resolve();
           })
       })
