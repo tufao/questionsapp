@@ -4,14 +4,27 @@ import axios from 'axios';
 
 Vue.use(Vuex);
 
+export const MainState = {
+  LOADING: 'state_loading',
+  OFFLINE: 'state_offline'
+}
+
 export default new Vuex.Store({
   state: {
     service_url: 'https://private-bbbe9-blissrecruitmentapi.apiary-mock.com/',
-    online: false
+    online: false,
+    value: MainState.LOADING
   },
   mutations: {
     updateOnlineStatus (state, value) {
       state.online = value;
+
+      switch (state.value) {
+        case MainState.LOADING:
+          if (!state.online) {
+            state.value = MainState.OFFLINE;
+          }
+      }
     }
   },
   actions: {
@@ -35,6 +48,7 @@ export default new Vuex.Store({
   },
   getters: {
     serviceUrl: (state) => state.service_url,
-    isOnline: (state) => state.online
+    isOnline: (state) => state.online,
+    mainState: (state) => state.value
   }
 })
