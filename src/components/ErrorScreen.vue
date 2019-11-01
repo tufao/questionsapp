@@ -2,7 +2,7 @@
   <div class="error">
     <div class="content">
       <span>{{ msg }}</span>
-      <button>RETRY</button>
+      <button @click="$emit('retry')">RETRY</button>
     </div>
   </div>
 </template>

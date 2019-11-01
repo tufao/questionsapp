@@ -2,7 +2,9 @@
   <div id="app">
     <div class="server-online-status" :class="{'status-on': isOnline, 'status-off': !isOnline}">Server </div>
     <LoadingScreen v-if="mainState==MainState.LOADING" msg="Loading..."/>
-    <ErrorScreen v-else-if="mainState==MainState.OFFLINE" msg="Its not possible to reach server, please try again later." />
+    <ErrorScreen v-else-if="mainState==MainState.OFFLINE"
+      msg="Its not possible to reach server, please try again later."
+      v-on:retry="retryConnect" />
     <div v-else>Ready!</div>
   </div>
 </template>
@@ -28,7 +30,7 @@ export default {
   },
 
   mounted () {
-    this.$store.dispatch('checkHealth');
+    this.retryConnect();
   },
 
   computed: {
@@ -36,6 +38,12 @@ export default {
       'isOnline',
       'mainState'
     ])
+  },
+
+  methods: {
+    retryConnect () {
+      this.$store.dispatch('checkHealth');
+    }
   }
 
 }

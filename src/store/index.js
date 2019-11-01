@@ -22,7 +22,6 @@ export default new Vuex.Store({
     },
 
     updateMainState (state) {
-      console.log('test: state before', state.online, state.value);
       switch (state.value) {
         case MainState.LOADING:
         case MainState.OFFLINE:
@@ -32,7 +31,6 @@ export default new Vuex.Store({
             state.value = MainState.OFFLINE;
           }
       }
-      console.log('test: state after', state.online, state.value);
     }
   },
   actions: {
@@ -40,7 +38,7 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         axios.get(`${context.state.service_url}/health`)
           .then((response) => {
-            const isHealthy = response.data && response.data.status === 'ok';
+            const isHealthy = response.data && response.data.status === 'OK';
             context.commit('updateConnection', isHealthy);
             context.commit('updateMainState');
             resolve();
