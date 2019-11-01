@@ -36,13 +36,14 @@ export default {
   computed: {
     ...mapGetters([
       'isOnline',
-      'mainState'
+      'mainState',
     ])
   },
 
   methods: {
     retryConnect () {
       this.$store.dispatch('checkHealth');
+      this.$store.dispatch('fetchQuestions');
     }
   }
 
