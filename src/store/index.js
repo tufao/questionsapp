@@ -10,10 +10,6 @@ export default new Vuex.Store({
     online: false
   },
   mutations: {
-    updateServiceEndPoint (state, url) {
-      state.service_url = url;
-    },
-
     updateOnlineStatus (state, value) {
       state.online = value;
     }
@@ -23,9 +19,8 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         axios.get(`${context.state.service_url}/health`)
           .then((response) => {
-            // use response object
-            console.log('response:', response);
-            context.commit('updateOnlineStatus', true);
+            const isHealthy = response.data && response.data.status === 'ok';
+            context.commit('updateOnlineStatus', isHealthy);
             resolve();
           })
           .catch((error) => {
@@ -39,6 +34,7 @@ export default new Vuex.Store({
   modules: {
   },
   getters: {
-    onlineStatus: (state) => state.online
+    serviceUrl: (state) => state.service_url,
+    isOnline: (state) => state.online
   }
 })

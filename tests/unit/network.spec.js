@@ -2,23 +2,22 @@ import store from '../../src/store';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
+const mock = new MockAdapter(axios);
 describe('Networking', () => {
   it('Check offline', async () => {
-    store.commit('updateServiceEndPoint', 'http://fakeaddress.fake');
+    mock.onGet(`${store.getters.serviceUrl}/health`).reply(440, null);
+
     await store.dispatch('checkHealth');
-    expect(store.getters.onlineStatus).toBeFalsy();
+    expect(store.getters.isOnline).toBeFalsy();
   });
 
   it('Check online', async () => {
-    const mock = new MockAdapter(axios);
-
-    mock.onGet('https://private-bbbe9-blissrecruitmentapi.apiary-mock.com/health').reply(200,
+    mock.onGet(`${store.getters.serviceUrl}/health`).reply(200,
       {
         'status': 'ok'
       });
 
-    store.commit('updateServiceEndPoint', 'https://private-bbbe9-blissrecruitmentapi.apiary-mock.com');
     await store.dispatch('checkHealth');
-    expect(store.getters.onlineStatus).toBeTruthy();
+    expect(store.getters.isOnline).toBeTruthy();
   });
 });
