@@ -5,16 +5,15 @@
         <span>{{ index + 1}}. </span><span>{{ item.question }}</span>
       </div>
 
-      <scroll-loader :loader-method="getNext" :loader-enable="loadMore" loader-color="rgba(102,102,102,.5)">
-      </scroll-loader>
+      <infinite-loading @infinite="getNext"></infinite-loading>
   </div>
 </template>
 
 <script>
 import Vue from 'vue';
-import ScrollLoader from 'vue-scroll-loader';
+import InfiniteLoading from 'vue-infinite-loading';
 
-Vue.use(ScrollLoader)
+Vue.use(InfiniteLoading, { /* options */ });
 
 export default {
   name: 'QuestionsList',
@@ -28,9 +27,15 @@ export default {
     }
   },
   methods: {
-    async getNext () {
-      await this.$store.dispatch('fetchMoreQuestions');
-      this.loadMore = this.total < this.list.length;
+    getNext ($state) {
+      this.$store.dispatch('fetchMoreQuestions');
+      $state.loaded();
+
+      this.$nextTick(() => {
+        if (this.total <= this.list.length) {
+          $state.complete();
+        }
+      });
     }
   }
 }
