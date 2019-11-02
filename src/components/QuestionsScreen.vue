@@ -2,20 +2,37 @@
 <template>
   <div>
     <div class="title">Questions:</div>
-    <QuestionsList :list="list" />
+    <div class="search">
+        Search: <input type="text" v-model="search" placeholder="Search title.." /></div>
+    <QuestionsList :list="filteredList" />
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import QuestionsList from './QuestionsList.vue'
 
 export default {
   name: 'QuestionsScreen',
   props: {
-    list: Array
+  },
+  data () {
+    return {
+      search: ''
+    }
   },
   components: {
     QuestionsList
+  },
+  computed: {
+    ...mapGetters([
+      'questions'
+    ]),
+    filteredList () {
+      return this.questions.filter(item => {
+        return item.question.toLowerCase().includes(this.search.toLowerCase());
+      })
+    }
   }
 }
 </script>
