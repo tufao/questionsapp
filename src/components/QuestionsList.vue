@@ -6,7 +6,6 @@
       </div>
 
       <scroll-loader :loader-method="getNext" :loader-enable="loadMore" loader-color="rgba(102,102,102,.5)">
-        <!--   You can replace the default loading animation with slot here. -->
       </scroll-loader>
   </div>
 </template>
@@ -20,7 +19,8 @@ Vue.use(ScrollLoader)
 export default {
   name: 'QuestionsList',
   props: {
-    list: Array
+    list: Array,
+    total: Number
   },
   data () {
     return {
@@ -28,8 +28,9 @@ export default {
     }
   },
   methods: {
-    getNext () {
-      console.log('I want more!');
+    async getNext () {
+      await this.$store.dispatch('fetchMoreQuestions');
+      this.loadMore = this.total < this.list.length;
     }
   }
 }
