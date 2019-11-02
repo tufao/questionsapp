@@ -1,14 +1,36 @@
 <template>
   <div class="questions">
-      <div v-for="(item, index) in list" :key="item.id">{{ index + 1}}. {{ item.question }}</div>
+      <div class="question" v-for="(item, index) in list" :key="item.id">
+        <img v-bind:src="item.thumb_url"/>
+        <span>{{ index + 1}}. </span><span>{{ item.question }}</span>
+      </div>
+
+      <scroll-loader :loader-method="getNext" :loader-enable="loadMore" loader-color="rgba(102,102,102,.5)">
+        <!--   You can replace the default loading animation with slot here. -->
+      </scroll-loader>
   </div>
 </template>
 
 <script>
+import Vue from 'vue';
+import ScrollLoader from 'vue-scroll-loader';
+
+Vue.use(ScrollLoader)
+
 export default {
   name: 'QuestionsList',
   props: {
     list: Array
+  },
+  data () {
+    return {
+      loadMore: true
+    }
+  },
+  methods: {
+    getNext () {
+      console.log('I want more!');
+    }
   }
 }
 </script>
@@ -18,6 +40,18 @@ export default {
 .questions {
   div:nth-child(even) {
     background-color: lightgray;
+  }
+}
+
+.question {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 20px;
+
+  span {
+    vertical-align: middle;
+    padding: 20px;
   }
 }
 </style>
