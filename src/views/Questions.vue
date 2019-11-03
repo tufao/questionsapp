@@ -2,7 +2,10 @@
   <div>
     <div class="options">
       <div class="search">
-          Search: <input type="text" v-model="search" placeholder="Search title.." /></div>
+          <span>Search:</span>
+          <input type="text" v-model="search" placeholder="Search title.." />
+          <button @click="search=''">Clear</button>
+      </div>
       <div @click="showShare=true" v-if="search!=''"><input type="image" alt="share" src="share-icon.png" width="35" /></div>
     </div>
     <QuestionsList :list="questions" :total="totalQuestions" @details="showDetails" />
