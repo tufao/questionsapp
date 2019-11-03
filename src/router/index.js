@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import QuestionsScreen from '../views/QuestionsScreen.vue'
+import Questions from '../views/Questions.vue'
 
 Vue.use(VueRouter)
 
@@ -8,12 +8,12 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: QuestionsScreen
+    component: Questions
   },
   {
     path: '/questions',
     name: 'Questions',
-    component: QuestionsScreen
+    component: Questions
   },
   {
     path: '/about',
