@@ -16,17 +16,18 @@ export default {
   },
   data () {
     return {
-      loadMore: true,
-      bottom: false
+      loadMore: true
     }
   },
   mounted () {
-    this.checkBottom();
     window.addEventListener('scroll', this.checkBottom);
+    this.checkBottom();
   },
   methods: {
     checkBottom () {
-      this.bottom = this.bottomVisible();
+      if (this.bottomVisible()) {
+        this.getNext();
+      }
     },
     bottomVisible () {
       const distance = 100;
@@ -40,12 +41,8 @@ export default {
       await this.$store.dispatch('fetchMoreQuestions');
     }
   },
-  watch: {
-    bottom (bottom) {
-      if (bottom) {
-        this.getNext();
-      }
-    }
+  update () {
+    this.checkBottom();
   },
   destroy () {
     window.removeEventListener('scroll', this.checkBottom);

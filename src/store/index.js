@@ -100,8 +100,8 @@ export default new Vuex.Store({
     },
 
     async fetchMoreQuestions (context) {
-      context.commit('incrementPage');
       await context.dispatch('fetchQuestions');
+      context.commit('incrementPage');
     },
 
     filterQuestions (context, search) {
