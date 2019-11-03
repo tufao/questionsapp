@@ -15,6 +15,15 @@ export default {
     ...mapGetters([
       'isOnline'
     ])
+  },
+
+  mounted () {
+    // check connection health every 30 seconds
+    setInterval(() => {
+      this.$store.dispatch('checkHealth');
+    }, 30000);
+
+    this.$store.dispatch('checkHealth');
   }
 }
 </script>

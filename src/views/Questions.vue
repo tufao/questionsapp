@@ -43,7 +43,6 @@ export default {
 
   methods: {
     retryConnect () {
-      this.$store.dispatch('checkHealth');
       this.$store.dispatch('fetchQuestions');
     }
   }

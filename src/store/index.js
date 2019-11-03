@@ -36,6 +36,11 @@ export default new Vuex.Store({
           } else {
             state.value = MainState.OFFLINE;
           }
+          break;
+        case MainState.READY:
+          if (!state.online) {
+            state.value = MainState.OFFLINE;
+          }
       }
     },
 
