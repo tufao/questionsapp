@@ -1,6 +1,6 @@
 <template>
   <div class="questions">
-      <div class="question" v-for="(item, index) in list" :key="item.id">
+      <div class="question" v-for="(item, index) in list" :key="item.id" @click="$emit('details', index)">
         <img v-bind:src="item.thumb_url"/>
         <span>{{ index + 1}}. </span><span>{{ item.question }}</span>
       </div>

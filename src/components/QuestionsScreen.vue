@@ -5,13 +5,15 @@
           Search: <input type="text" v-model="search" placeholder="Search title.." /></div>
       <div @click="showShare=true" v-if="search!=''"><input type="image" alt="share" src="share-icon.png" width="35" /></div>
     </div>
-    <QuestionsList :list="questions" :total="totalQuestions" />
+    <QuestionsList :list="questions" :total="totalQuestions" @details="showDetails" />
     <ShareScreen v-if="showShare" v-on:close="showShare=false" />
+    <QuestionDetails v-if="selectedQuestion" :question="selectedQuestion" />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+import QuestionDetails from './QuestionDetails.vue'
 import QuestionsList from './QuestionsList.vue'
 import ShareScreen from './ShareScreen.vue'
 
@@ -22,14 +24,13 @@ export default {
   data () {
     return {
       email: '',
-      sending: false,
-      shareError: false,
-      shareMessage: '',
       search: '',
+      selectedQuestion: null,
       showShare: false
     }
   },
   components: {
+    QuestionDetails,
     QuestionsList,
     ShareScreen
   },
@@ -42,6 +43,12 @@ export default {
   },
   mounted () {
     this.search = this.$route.query.question_filter;
+  },
+  methods: {
+    showDetails (index) {
+      console.log('questions: show details for', index);
+      this.selectedQuestion = this.questions[index];
+    }
   },
   watch: {
     search (val) {
