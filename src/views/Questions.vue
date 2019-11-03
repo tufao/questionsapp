@@ -1,41 +1,94 @@
 <template>
-  <div id="app">
-    <QuestionsScreen v-if="mainState === MainState.READY" />
+  <div>
+    <div class="options">
+      <div class="search">
+          <span>Search:</span>
+          <input type="text" v-model="search" placeholder="Search title.." />
+          <button @click="search=''">Clear</button>
+      </div>
+      <div @click="showShare=true" v-if="search!=''"><input type="image" alt="share" src="share-icon.png" width="35" /></div>
+    </div>
+    <QuestionsList :list="questions" :total="totalQuestions" @details="showDetails" />
+    <QuestionDetails v-if="selectedQuestion" :question="selectedQuestion" @close="closeDetails" />
+    <ShareScreen v-if="showShare" @close="showShare=false" />
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
-import { MainState } from '@/store';
-import QuestionsScreen from '@/components/QuestionsScreen.vue';
+import QuestionDetails from '@/components/QuestionDetails.vue'
+import QuestionsList from '@/components/QuestionsList.vue'
+import ShareScreen from '@/components/ShareScreen.vue'
 
 export default {
-  name: 'app',
-
+  name: 'QuestionsScreen',
+  props: {
+  },
   data () {
     return {
-      MainState
+      email: '',
+      search: '',
+      selectedQuestion: null,
+      showShare: false
     }
   },
-
   components: {
-    QuestionsScreen
+    QuestionDetails,
+    QuestionsList,
+    ShareScreen
   },
-
   computed: {
     ...mapGetters([
-      'mainState'
-    ])
+      'questions',
+      'totalQuestions',
+      'filterSearch',
+      'getQuestionById'
+    ]),
+    question_id () {
+      return parseInt(this.$route.query.question_id);
+    },
+    question_filter () {
+      return this.$route.query.question_filter;
+    }
+  },
+  async mounted () {
+    await this.$store.dispatch('fetchQuestions');
+    this.search = this.question_filter;
+
+    if (this.question_id) {
+      this.showDetails(this.question_id);
+    }
+  },
+  methods: {
+    showDetails (id) {
+      this.selectedQuestion = this.questions.find((item) => {
+        return item.id === id;
+      });
+      if (this.question_id !== id) {
+        this.$router.replace({ path: 'questions', query: { question_id: id } });
+      }
+    },
+    closeDetails () {
+      this.showDetails(null);
+    }
+  },
+  watch: {
+    search (val) {
+      this.$store.dispatch('filterQuestions', val);
+      if (this.question_filter !== val) {
+        this.$router.replace({ path: 'questions', query: { question_filter: val } });
+      }
+      this.shareMessage = '';
+    }
   }
 }
 </script>
 
-<style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style scoped lang="scss">
+.options {
+  display: flex;
+  justify-content: space-between;
+  border: 2px solid green;
+  padding: 20px;
 }
 </style>

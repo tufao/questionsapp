@@ -18,7 +18,7 @@ export default new Vuex.Store({
 
     questions: new Map(),
     questionsArray: [],
-    totalPerPage: 5,
+    totalPerPage: 10,
     page: 1,
     filterSearch: ''
   },

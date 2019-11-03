@@ -1,6 +1,6 @@
 <template>
     <div>
-        <dic class="overlay" />
+        <div class="overlay" />
         <div class="form">
             <span class="title">Share by email:</span>
             <div><input type="email" text="" v-model="email" />
