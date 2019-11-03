@@ -47,7 +47,7 @@ export default {
     },
     async vote (index) {
       this.question.choices[index].votes++;
-      await this.$store.dispatch('updateQuestion', this.question);
+      await this.$store.dispatch('sendQuestion', this.question);
     }
   }
 }

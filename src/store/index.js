@@ -13,7 +13,7 @@ export const MainState = {
 export default new Vuex.Store({
   state: {
     value: MainState.LOADING,
-    service_url: 'https://private-bbbe9-blissrecruitmentapi.apiary-mock.com/',
+    service_url: 'https://private-bbbe9-blissrecruitmentapi.apiary-mock.com',
     online: false,
 
     questions: new Map(),
@@ -125,10 +125,10 @@ export default new Vuex.Store({
       });
     },
 
-    async updateQuestion (context, question) {
+    async sendQuestion (context, question) {
       return new Promise((resolve, reject) => {
         const url = `${context.state.service_url}/questions/${question.id}`;
-        axios.put(url, question, {
+        axios.put(url, JSON.stringify(question), {
           header: { 'Content-Type': 'application/json' }
         })
           .then((result) => {
