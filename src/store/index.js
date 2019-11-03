@@ -15,7 +15,11 @@ export default new Vuex.Store({
     value: MainState.LOADING,
     service_url: 'https://private-bbbe9-blissrecruitmentapi.apiary-mock.com/',
     online: false,
-    questions: []
+
+    questions: new Map(),
+    questionsArray: [],
+    totalPerPage: 5,
+    page: 1
   },
   mutations: {
     updateConnection (state, value) {
@@ -34,8 +38,17 @@ export default new Vuex.Store({
       }
     },
 
-    updateQuestions (state, questions) {
-      state.questions = questions;
+    updateQuestions (state, results) {
+      results.forEach((entry) => {
+        state.questions.set(entry.id, entry);
+      });
+      state.questionsArray = Array.from(state.questions.values());
+    },
+
+    incrementPage (state) {
+      if (state.page < state.questionsArray.length / state.totalPerPage) {
+        state.page++;
+      }
     }
   },
   actions: {
@@ -58,9 +71,13 @@ export default new Vuex.Store({
     },
     async fetchQuestions (context) {
       return new Promise((resolve, reject) => {
-        axios.get(`${context.state.service_url}/questions`)
+        const url = `${context.state.service_url}/questions`;
+        axios.get(url, {
+          limit: context.state.totalPerPage,
+          offset: context.state.totalPerPage * (context.state.page - 1),
+          filter: ''
+        })
           .then((response) => {
-            console.log('store: questions update', response.data);
             context.commit('updateQuestions', response.data);
             resolve();
           })
@@ -69,6 +86,10 @@ export default new Vuex.Store({
             resolve();
           });
       });
+    },
+    async fetchMoreQuestions (context) {
+      context.commit('incrementPage');
+      await context.dispatch('fetchQuestions');
     }
   },
   modules: {
@@ -77,6 +98,9 @@ export default new Vuex.Store({
     serviceUrl: (state) => state.service_url,
     isOnline: (state) => state.online,
     mainState: (state) => state.value,
-    questions: (state) => state.questions
+    totalQuestions: (state) => state.questionsArray.length,
+    totalPerPage: (state) => state.totalPerPage,
+    maxQuestions: (state) => state.totalPerPage * state.page,
+    questions: (state, getters) => state.questionsArray.slice(0, getters.maxQuestions)
   }
 })

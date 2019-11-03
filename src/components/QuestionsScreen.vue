@@ -4,7 +4,7 @@
     <div class="title">Questions:</div>
     <div class="search">
         Search: <input type="text" v-model="search" placeholder="Search title.." /></div>
-    <QuestionsList :list="filteredList" />
+    <QuestionsList :list="filteredList" :total="totalQuestions" />
   </div>
 </template>
 
@@ -26,7 +26,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'questions'
+      'questions',
+      'totalQuestions'
     ]),
     filteredList () {
       return this.questions.filter(item => {
