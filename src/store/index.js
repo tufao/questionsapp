@@ -129,10 +129,10 @@ export default new Vuex.Store({
     totalQuestions: (state) => state.questionsArray.length,
     totalPerPage: (state) => state.totalPerPage,
     maxQuestions: (state) => state.totalPerPage * state.page,
-    filterSearch: (state) => state.filterSearch,
-    filteredQuestions: (state) => {
+    filterSearch: (state) => state.filterSearch || '',
+    filteredQuestions: (state, getters) => {
       return state.questionsArray.filter(item => {
-        return item.question.toLowerCase().includes(state.filterSearch.toLowerCase());
+        return item.question.toLowerCase().includes(getters.filterSearch.toLowerCase());
       })
     },
     questions: (state, getters) => getters.filteredQuestions.slice(0, getters.maxQuestions)
