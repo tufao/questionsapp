@@ -90,6 +90,13 @@ export default new Vuex.Store({
     async fetchMoreQuestions (context) {
       context.commit('incrementPage');
       await context.dispatch('fetchQuestions');
+    },
+    async shareSearch (context, options) {
+      try {
+        await axios.post(`${context.state.service_url}/share/?destination_email=${options.email}&content_url=${options.url}`);
+      } catch (error) {
+        console.log('share error:', error);
+      }
     }
   },
   modules: {
