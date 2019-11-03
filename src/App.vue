@@ -62,4 +62,13 @@ export default {
 .status-off:after {
   content: 'offline';
 }
+
+.overlay {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0px;
+  left: 0px;
+  background-color:rgba(100, 100, 100, .8);
+}
 </style>

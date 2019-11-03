@@ -1,13 +1,17 @@
 <template>
-    <div class="details">
-        <img v-bind:src="question.thumb_url"/>
-        <span>Question:</span><span>{{ question.question }}</span>
-        <span>Choices:</span>
-        <ul>
-            <li v-for="(choice, index) in question.choices" :key="index">
-                {{ choice.choice }} ({{ choice.votes }} votes)
-            </li>
-        </ul>
+    <div>
+        <div class="overlay" />
+        <div class="details">
+            <img v-bind:src="question.image_url"/>
+            <span>Question:</span><span>{{ question.question }}</span>
+            <span>Choices:</span>
+            <ul>
+                <li v-for="(choice, index) in question.choices" :key="index">
+                    {{ choice.choice }} ({{ choice.votes }} votes)
+                </li>
+            </ul>
+            <button @click="$emit('close')">Close</button>
+        </div>
     </div>
 </template>
 
@@ -26,8 +30,7 @@ export default {
 
 <style scoped lang="scss">
 .details {
-    position: absolute;
-    width: 320px;
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -36,5 +39,8 @@ export default {
 
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 20px;
 }
 </style>
