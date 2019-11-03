@@ -1,8 +1,9 @@
 <template>
   <div class="questions">
-      <div class="question" v-for="(item, index) in list" :key="item.id" @click="$emit('details', item.id)">
+      <div class="question" v-for="item in list" :key="item.id" @click="$emit('details', item.id)">
+        <span>{{ item.id }}. </span>
         <img v-bind:src="item.thumb_url"/>
-        <span>{{ index + 1}}. </span><span>{{ item.question }}</span>
+        <span>{{ item.question }}</span>
       </div>
   </div>
 </template>
@@ -16,17 +17,18 @@ export default {
   },
   data () {
     return {
-      loadMore: true,
-      bottom: false
+      loadMore: true
     }
   },
   mounted () {
-    this.checkBottom();
     window.addEventListener('scroll', this.checkBottom);
+    this.checkBottom();
   },
   methods: {
     checkBottom () {
-      this.bottom = this.bottomVisible();
+      if (this.bottomVisible()) {
+        this.getNext();
+      }
     },
     bottomVisible () {
       const distance = 100;
@@ -40,12 +42,8 @@ export default {
       await this.$store.dispatch('fetchMoreQuestions');
     }
   },
-  watch: {
-    bottom (bottom) {
-      if (bottom) {
-        this.getNext();
-      }
-    }
+  update () {
+    this.checkBottom();
   },
   destroy () {
     window.removeEventListener('scroll', this.checkBottom);

@@ -1,20 +1,48 @@
 <template>
   <div id="app">
     <div class="server-online-status" :class="{'status-on': isOnline, 'status-off': !isOnline}">Server </div>
+    <LoadingScreen v-if="mainState==MainState.LOADING" msg="Loading..."/>
+    <ErrorScreen v-else-if="mainState==MainState.OFFLINE"
+      msg="Its not possible to reach server, please try again later."
+      v-on:retry="retryConnect" />
     <router-view/>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+import { MainState } from '@/store';
+import ErrorScreen from '@/components/ErrorScreen.vue';
+import LoadingScreen from '@/components/LoadingScreen.vue';
 
 export default {
   name: 'app',
 
+  data () {
+    return {
+      MainState
+    }
+  },
+
+  components: {
+    LoadingScreen,
+    ErrorScreen
+  },
+
   computed: {
     ...mapGetters([
-      'isOnline'
+      'isOnline',
+      'mainState'
     ])
+  },
+
+  mounted () {
+    // check connection health every 30 seconds
+    setInterval(() => {
+      this.$store.dispatch('checkHealth');
+    }, 30000);
+
+    this.$store.dispatch('checkHealth');
   }
 }
 </script>

@@ -43,10 +43,14 @@ export default {
     ]),
     question_id () {
       return parseInt(this.$route.query.question_id);
+    },
+    question_filter () {
+      return this.$route.query.question_filter;
     }
   },
-  mounted () {
-    this.search = this.$route.query.question_filter;
+  async mounted () {
+    await this.$store.dispatch('fetchQuestions');
+    this.search = this.question_filter;
 
     if (this.question_id) {
       this.showDetails(this.question_id);
@@ -67,11 +71,11 @@ export default {
   },
   watch: {
     search (val) {
-      if (val) {
+      this.$store.dispatch('filterQuestions', val);
+      if (this.question_filter !== val) {
         this.$router.replace({ path: 'questions', query: { question_filter: val } });
-        this.$store.dispatch('filterQuestions', val);
-        this.shareMessage = '';
       }
+      this.shareMessage = '';
     }
   }
 }

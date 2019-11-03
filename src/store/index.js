@@ -36,6 +36,11 @@ export default new Vuex.Store({
           } else {
             state.value = MainState.OFFLINE;
           }
+          break;
+        case MainState.READY:
+          if (!state.online) {
+            state.value = MainState.OFFLINE;
+          }
       }
     },
 
@@ -95,8 +100,8 @@ export default new Vuex.Store({
     },
 
     async fetchMoreQuestions (context) {
-      context.commit('incrementPage');
       await context.dispatch('fetchQuestions');
+      context.commit('incrementPage');
     },
 
     filterQuestions (context, search) {
@@ -124,10 +129,10 @@ export default new Vuex.Store({
     totalQuestions: (state) => state.questionsArray.length,
     totalPerPage: (state) => state.totalPerPage,
     maxQuestions: (state) => state.totalPerPage * state.page,
-    filterSearch: (state) => state.filterSearch,
-    filteredQuestions: (state) => {
+    filterSearch: (state) => state.filterSearch || '',
+    filteredQuestions: (state, getters) => {
       return state.questionsArray.filter(item => {
-        return item.question.toLowerCase().includes(state.filterSearch.toLowerCase());
+        return item.question.toLowerCase().includes(getters.filterSearch.toLowerCase());
       })
     },
     questions: (state, getters) => getters.filteredQuestions.slice(0, getters.maxQuestions)
