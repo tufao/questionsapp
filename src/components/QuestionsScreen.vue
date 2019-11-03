@@ -6,8 +6,8 @@
       <div @click="showShare=true" v-if="search!=''"><input type="image" alt="share" src="share-icon.png" width="35" /></div>
     </div>
     <QuestionsList :list="questions" :total="totalQuestions" @details="showDetails" />
-    <QuestionDetails v-if="selectedQuestion" :question="selectedQuestion" />
-    <ShareScreen v-if="showShare" v-on:close="showShare=false" />
+    <QuestionDetails v-if="selectedQuestion" :question="selectedQuestion" @close="closeDetails" />
+    <ShareScreen v-if="showShare" @close="showShare=false" />
   </div>
 </template>
 
@@ -60,6 +60,9 @@ export default {
       if (this.question_id !== id) {
         this.$router.replace({ path: 'questions', query: { question_id: id } });
       }
+    },
+    closeDetails () {
+      this.showDetails(null);
     }
   },
   watch: {
