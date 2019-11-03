@@ -92,11 +92,15 @@ export default new Vuex.Store({
       await context.dispatch('fetchQuestions');
     },
     async shareSearch (context, options) {
-      try {
-        await axios.post(`${context.state.service_url}/share/?destination_email=${options.email}&content_url=${options.url}`);
-      } catch (error) {
-        console.log('share error:', error);
-      }
+      return new Promise((resolve, reject) => {
+        axios.post(`${context.state.service_url}/share/?destination_email=${options.email}&content_url=${options.url}`)
+          .then(() => {
+            resolve(true);
+          })
+          .catch(() => {
+            resolve(false);
+          });
+      });
     }
   },
   modules: {

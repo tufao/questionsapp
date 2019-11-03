@@ -8,7 +8,7 @@
         <div><span>Share by email:</span>
           <input type="email" text="" v-model="email" />
           <button ref="button" @click="shareSearch" :disabled="sending">Share</button></div>
-        <span class="message">{{ shareMessage }}</span>
+        <span :class="{error: shareError}" class="message">{{ shareMessage }}</span>
       </div>
     </div>
     <QuestionsList :list="filteredList" :total="totalQuestions" />
@@ -28,6 +28,7 @@ export default {
       search: this.$route.query.question_filter || '',
       email: '',
       sending: false,
+      shareError: false,
       shareMessage: ''
     }
   },
@@ -51,15 +52,22 @@ export default {
   methods: {
     async shareSearch () {
       if (!this.validateEmail(this.email)) {
+        this.shareError = true;
         this.shareMessage = 'Invalid email!';
         return;
       }
 
       this.sending = true;
-      await this.$store.dispatch('shareSearch', { email: this.email, url: this.$route.fullPath });
+      const result = await this.$store.dispatch('shareSearch', { email: this.email, url: this.$route.fullPath });
       this.email = '';
       this.sending = false;
-      this.shareMessage = 'Sent!';
+      if (result) {
+        this.shareError = false;
+        this.shareMessage = 'Your share was sent!';
+      } else {
+        this.shareError = true;
+        this.shareMessage = 'Could not share, please try again later!';
+      }
     },
     validateEmail (email) {
       /* eslint-disable-next-line no-useless-escape */
@@ -70,6 +78,8 @@ export default {
   watch: {
     search (val) {
       this.$router.replace({ path: 'questions', query: { question_filter: val } });
+
+      this.shareMessage = '';
     }
   }
 }
@@ -91,6 +101,10 @@ export default {
 
   .message {
     font-size: 10px;
+  }
+
+  .error {
+    color: red;
   }
 }
 </style>
