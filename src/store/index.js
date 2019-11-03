@@ -123,6 +123,21 @@ export default new Vuex.Store({
             resolve(false);
           });
       });
+    },
+
+    async updateQuestion (context, question) {
+      return new Promise((resolve, reject) => {
+        const url = `${context.state.service_url}/questions/${question.id}`;
+        axios.put(url, question, {
+          header: { 'Content-Type': 'application/json' }
+        })
+          .then((result) => {
+            resolve(true);
+          })
+          .catch(() => {
+            resolve(false);
+          });
+      });
     }
   },
   modules: {

@@ -8,7 +8,8 @@
             <span class="title">Choices:</span>
             <ul class="choices">
                 <li v-for="(choice, index) in question.choices" :key="index">
-                    {{ choice.choice }} ({{ choice.votes }} votes)
+                    <span>{{ choice.choice }} ({{ choice.votes }} votes)</span>
+                    <button @click="vote(index)">Vote</button>
                 </li>
             </ul>
             <button @click="$emit('close')">Close</button>
@@ -43,6 +44,10 @@ export default {
       const year = date.getFullYear();
 
       return day + ' ' + monthNames[monthIndex] + ' ' + year;
+    },
+    async vote (index) {
+      this.question.choices[index].votes++;
+      await this.$store.dispatch('updateQuestion', this.question);
     }
   }
 }
