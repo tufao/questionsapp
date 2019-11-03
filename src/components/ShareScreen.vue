@@ -1,5 +1,6 @@
 <template>
-    <div class="share">
+    <div>
+        <dic class="overlay" />
         <div class="form">
             <span class="title">Share by email:</span>
             <div><input type="email" text="" v-model="email" />
@@ -53,17 +54,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.share {
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  top: 0px;
-  left: 0px;
-  background-color:rgba(100, 100, 100, .8);
-}
-
 .form {
-    position: absolute;
+    position: fixed;
     width: 320px;
     height: 240px;
     top: 50%;
