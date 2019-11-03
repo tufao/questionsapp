@@ -33,10 +33,12 @@ export default {
       }
 
       this.sending = true;
-      const result = await this.$store.dispatch('shareSearch', { email: this.email, url: this.$route.fullPath });
-      this.email = '';
+      const result = await this.$store.dispatch('shareSearch',
+        { email: this.email, url: window.location.href });
+
       this.sending = false;
       if (result) {
+        this.email = '';
         this.shareError = false;
         this.shareMessage = 'Your share was sent!';
       } else {

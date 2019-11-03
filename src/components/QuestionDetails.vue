@@ -11,6 +11,7 @@
                 </li>
             </ul>
             <button @click="$emit('close')">Close</button>
+            <input class="share" type="image" alt="share" src="share-icon.png" width="35" @click="$emit('share')" />
         </div>
     </div>
 </template>
@@ -42,5 +43,11 @@ export default {
     align-items: flex-start;
     justify-content: space-between;
     padding: 20px;
+
+    .share {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+    }
 }
 </style>

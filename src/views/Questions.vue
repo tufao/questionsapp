@@ -9,7 +9,7 @@
       <div @click="showShare=true" v-if="search!=''"><input type="image" alt="share" src="share-icon.png" width="35" /></div>
     </div>
     <QuestionsList :list="questions" :total="totalQuestions" @details="showDetails" />
-    <QuestionDetails v-if="selectedQuestion" :question="selectedQuestion" @close="closeDetails" />
+    <QuestionDetails v-if="selectedQuestion" :question="selectedQuestion" @close="closeDetails" @share="showShare=true" />
     <ShareScreen v-if="showShare" @close="showShare=false" />
   </div>
 </template>

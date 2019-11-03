@@ -110,8 +110,13 @@ export default new Vuex.Store({
 
     async shareSearch (context, options) {
       return new Promise((resolve, reject) => {
-        axios.post(`${context.state.service_url}/share/?destination_email=${options.email}&content_url=${options.url}`)
-          .then(() => {
+        const url = `${context.state.service_url}/share`;
+        const shareUrl = encodeURIComponent(options.url);
+        axios.post(url, {
+          destination_email: options.email,
+          content_url: shareUrl
+        })
+          .then((result) => {
             resolve(true);
           })
           .catch(() => {
