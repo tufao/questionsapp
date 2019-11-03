@@ -32,5 +32,4 @@ describe('Networking', () => {
     expect(store.getters.questions.length).toBeLessThanOrEqual(store.getters.maxQuestions);
     expect(store.getters.questions[0].id).toBe(1);
   });
-
 });
