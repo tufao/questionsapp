@@ -1,7 +1,6 @@
 
 <template>
   <div>
-    <div class="title">Questions:</div>
     <div class="search">
         Search: <input type="text" v-model="search" placeholder="Search title.." /></div>
     <QuestionsList :list="filteredList" :total="totalQuestions" />
@@ -18,7 +17,7 @@ export default {
   },
   data () {
     return {
-      search: ''
+      search: this.$route.query.question_filter || ''
     }
   },
   components: {
