@@ -13,9 +13,9 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import QuestionDetails from './QuestionDetails.vue'
-import QuestionsList from './QuestionsList.vue'
-import ShareScreen from './ShareScreen.vue'
+import QuestionDetails from '@/components/QuestionDetails.vue'
+import QuestionsList from '@/components/QuestionsList.vue'
+import ShareScreen from '@/components/ShareScreen.vue'
 
 export default {
   name: 'QuestionsScreen',
