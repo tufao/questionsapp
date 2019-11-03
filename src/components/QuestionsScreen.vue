@@ -11,7 +11,7 @@
         <span :class="{error: shareError}" class="message">{{ shareMessage }}</span>
       </div>
     </div>
-    <QuestionsList :list="filteredList" :total="totalQuestions" />
+    <QuestionsList :list="questions" :total="totalQuestions" />
   </div>
 </template>
 
@@ -25,11 +25,11 @@ export default {
   },
   data () {
     return {
-      search: this.$route.query.question_filter || '',
       email: '',
       sending: false,
       shareError: false,
-      shareMessage: ''
+      shareMessage: '',
+      search: ''
     }
   },
   components: {
@@ -38,16 +38,15 @@ export default {
   computed: {
     ...mapGetters([
       'questions',
-      'totalQuestions'
+      'totalQuestions',
+      'filterSearch'
     ]),
-    filteredList () {
-      return this.questions.filter(item => {
-        return item.question.toLowerCase().includes(this.search.toLowerCase());
-      })
-    },
     showShare () {
       return this.search !== '';
     }
+  },
+  mounted () {
+    this.search = this.$route.query.question_filter;
   },
   methods: {
     async shareSearch () {
@@ -78,7 +77,7 @@ export default {
   watch: {
     search (val) {
       this.$router.replace({ path: 'questions', query: { question_filter: val } });
-
+      this.$store.dispatch('filterQuestions', val);
       this.shareMessage = '';
     }
   }
