@@ -5,7 +5,7 @@
     <ErrorScreen v-else-if="mainState==MainState.OFFLINE"
       msg="Its not possible to reach server, please try again later."
       v-on:retry="retryConnect" />
-    <router-view/>
+    <router-view v-else />
   </div>
 </template>
 
