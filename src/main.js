@@ -1,12 +1,13 @@
-import Vue from 'vue'
-import App from './App.vue'
-import store from './store'
+import Vue from 'vue';
+import store from './store';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
+import App from './App.vue';
+import router from './router';
 
 const mock = new MockAdapter(axios);
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 /* eslint-disable-next-line no-undef */
 if (DEBUG) {
@@ -20,5 +21,6 @@ if (DEBUG) {
 
 new Vue({
   store,
+  router,
   render: h => h(App)
 }).$mount('#app')
