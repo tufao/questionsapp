@@ -4,17 +4,10 @@
         <img v-bind:src="item.thumb_url"/>
         <span>{{ index + 1}}. </span><span>{{ item.question }}</span>
       </div>
-
-      <infinite-loading @infinite="getNext"></infinite-loading>
   </div>
 </template>
 
 <script>
-import Vue from 'vue';
-import InfiniteLoading from 'vue-infinite-loading';
-
-Vue.use(InfiniteLoading, { /* options */ });
-
 export default {
   name: 'QuestionsList',
   props: {
@@ -23,20 +16,39 @@ export default {
   },
   data () {
     return {
-      loadMore: true
+      loadMore: true,
+      bottom: false
     }
   },
+  mounted () {
+    this.checkBottom();
+    window.addEventListener('scroll', this.checkBottom);
+  },
   methods: {
-    getNext ($state) {
-      this.$store.dispatch('fetchMoreQuestions');
-      $state.loaded();
-
-      this.$nextTick(() => {
-        if (this.total <= this.list.length) {
-          $state.complete();
-        }
-      });
+    checkBottom () {
+      this.bottom = this.bottomVisible();
+    },
+    bottomVisible () {
+      const distance = 100;
+      const scrollY = window.scrollY;
+      const visible = document.documentElement.clientHeight;
+      const pageHeight = document.documentElement.scrollHeight;
+      const bottomOfPage = visible + scrollY + distance >= pageHeight;
+      return bottomOfPage || pageHeight < visible;
+    },
+    async getNext () {
+      await this.$store.dispatch('fetchMoreQuestions');
     }
+  },
+  watch: {
+    bottom (bottom) {
+      if (bottom) {
+        this.getNext();
+      }
+    }
+  },
+  destroy () {
+    window.removeEventListener('scroll', this.checkBottom);
   }
 }
 </script>

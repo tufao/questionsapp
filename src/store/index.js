@@ -19,7 +19,8 @@ export default new Vuex.Store({
     questions: new Map(),
     questionsArray: [],
     totalPerPage: 5,
-    page: 1
+    page: 1,
+    filterSearch: ''
   },
   mutations: {
     updateConnection (state, value) {
@@ -49,6 +50,10 @@ export default new Vuex.Store({
       if (state.page < state.questionsArray.length / state.totalPerPage) {
         state.page++;
       }
+    },
+
+    updateFilterSearch (state, search) {
+      state.filterSearch = search;
     }
   },
   actions: {
@@ -69,6 +74,7 @@ export default new Vuex.Store({
           });
       });
     },
+
     async fetchQuestions (context) {
       return new Promise((resolve, reject) => {
         const url = `${context.state.service_url}/questions`;
@@ -87,9 +93,26 @@ export default new Vuex.Store({
           });
       });
     },
+
     async fetchMoreQuestions (context) {
       context.commit('incrementPage');
       await context.dispatch('fetchQuestions');
+    },
+
+    filterQuestions (context, search) {
+      context.commit('updateFilterSearch', search);
+    },
+
+    async shareSearch (context, options) {
+      return new Promise((resolve, reject) => {
+        axios.post(`${context.state.service_url}/share/?destination_email=${options.email}&content_url=${options.url}`)
+          .then(() => {
+            resolve(true);
+          })
+          .catch(() => {
+            resolve(false);
+          });
+      });
     }
   },
   modules: {
@@ -101,6 +124,12 @@ export default new Vuex.Store({
     totalQuestions: (state) => state.questionsArray.length,
     totalPerPage: (state) => state.totalPerPage,
     maxQuestions: (state) => state.totalPerPage * state.page,
-    questions: (state, getters) => state.questionsArray.slice(0, getters.maxQuestions)
+    filterSearch: (state) => state.filterSearch,
+    filteredQuestions: (state) => {
+      return state.questionsArray.filter(item => {
+        return item.question.toLowerCase().includes(state.filterSearch.toLowerCase());
+      })
+    },
+    questions: (state, getters) => getters.filteredQuestions.slice(0, getters.maxQuestions)
   }
 })

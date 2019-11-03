@@ -1,0 +1,91 @@
+<template>
+    <div class="share">
+        <div class="form">
+            <span class="title">Share by email:</span>
+            <div><input type="email" text="" v-model="email" />
+                <button @click="shareSearch" :disabled="sending">Share</button></div>
+            <span :class="{error: shareError}" class="message">{{ shareMessage }}</span>
+            <button @click="$emit('close')">Close</button>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+  name: 'ShareScreen',
+  props: {
+  },
+  data () {
+    return {
+      email: '',
+      shareError: false,
+      shareMessage: ''
+    }
+  },
+  methods: {
+    async shareSearch () {
+      if (!this.validateEmail(this.email)) {
+        this.shareError = true;
+        this.shareMessage = 'Invalid email!';
+        return;
+      }
+
+      this.sending = true;
+      const result = await this.$store.dispatch('shareSearch', { email: this.email, url: this.$route.fullPath });
+      this.email = '';
+      this.sending = false;
+      if (result) {
+        this.shareError = false;
+        this.shareMessage = 'Your share was sent!';
+      } else {
+        this.shareError = true;
+        this.shareMessage = 'Could not share, please try again later!';
+      }
+    },
+    validateEmail (email) {
+      /* eslint-disable-next-line no-useless-escape */
+      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(String(email).toLowerCase());
+    }
+  }
+}
+</script>
+
+<style scoped lang="scss">
+.share {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0px;
+  left: 0px;
+  background-color:rgba(100, 100, 100, .8);
+}
+
+.form {
+    position: absolute;
+    width: 320px;
+    height: 240px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    border: 1px solid #000;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+
+    .title {
+        font-size: 24pt;
+    }
+
+    .message {
+        font-size: 10pt;
+    }
+
+    .error {
+        color: red;
+    }
+}
+</style>
