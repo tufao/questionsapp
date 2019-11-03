@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <div class="server-online-status" :class="{'status-on': isOnline, 'status-off': !isOnline}">Server </div>
     <LoadingScreen v-if="mainState==MainState.LOADING" msg="Loading..."/>
     <ErrorScreen v-else-if="mainState==MainState.OFFLINE"
       msg="Its not possible to reach server, please try again later."
@@ -71,26 +70,5 @@ export default {
   &.router-link-exact-active {
     color: #42b983;
   }
-}
-
-.server-online-status {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
-
-.status-on {
-  color: green;
-}
-.status-on:after {
-    content: 'online';
-}
-
-.status-off {
-  color: red;
-}
-
-.status-off:after {
-  content: 'offline';
 }
 </style>

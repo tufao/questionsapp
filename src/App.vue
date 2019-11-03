@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <div class="server-online-status" :class="{'status-on': isOnline, 'status-off': !isOnline}">Server </div>
     <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/questions">Questions</router-link> |
@@ -29,5 +30,27 @@
       color: #42b983;
     }
   }
+}
+
+.server-online-status {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.status-on {
+  color: green;
+}
+
+.status-on:after {
+    content: 'online';
+}
+
+.status-off {
+  color: red;
+}
+
+.status-off:after {
+  content: 'offline';
 }
 </style>
