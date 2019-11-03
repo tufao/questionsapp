@@ -5,6 +5,20 @@
   </div>
 </template>
 
+<script>
+import { mapGetters } from 'vuex';
+
+export default {
+  name: 'app',
+
+  computed: {
+    ...mapGetters([
+      'isOnline'
+    ])
+  }
+}
+</script>
+
 <style lang="scss">
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
