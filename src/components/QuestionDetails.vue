@@ -3,9 +3,10 @@
         <div class="overlay" />
         <div class="details">
             <img v-bind:src="question.image_url"/>
-            <span>Question:</span><span>{{ question.question }}</span>
-            <span>Choices:</span>
-            <ul>
+            <span class="title">Question:</span><span>{{ question.question }}</span>
+            <span class="title">Published at:</span><span>{{ publishDate }}</span>
+            <span class="title">Choices:</span>
+            <ul class="choices">
                 <li v-for="(choice, index) in question.choices" :key="index">
                     {{ choice.choice }} ({{ choice.votes }} votes)
                 </li>
@@ -22,8 +23,26 @@ export default {
   props: {
     question: Object
   },
-  data () {
-    return {
+  computed: {
+    publishDate () {
+      const date = new Date(this.question.published_at);
+      return this.formatDate(date);
+    }
+  },
+  methods: {
+    formatDate (date) {
+      const monthNames = [
+        'January', 'February', 'March',
+        'April', 'May', 'June', 'July',
+        'August', 'September', 'October',
+        'November', 'December'
+      ];
+
+      const day = date.getDate();
+      const monthIndex = date.getMonth();
+      const year = date.getFullYear();
+
+      return day + ' ' + monthNames[monthIndex] + ' ' + year;
     }
   }
 }
