@@ -16,7 +16,8 @@ export default new Vuex.Store({
     service_url: 'https://private-bbbe9-blissrecruitmentapi.apiary-mock.com/',
     online: false,
 
-    questions: [],
+    questions: new Map(),
+    questionsArray: [],
     totalPerPage: 5,
     page: 1
   },
@@ -37,12 +38,15 @@ export default new Vuex.Store({
       }
     },
 
-    updateQuestions (state, questions) {
-      state.questions = questions;
+    updateQuestions (state, results) {
+      results.forEach((entry) => {
+        state.questions.set(entry.id, entry);
+      });
+      state.questionsArray = Array.from(state.questions.values());
     },
 
     incrementPage (state) {
-      if (state.page < state.questions.length / state.totalPerPage) {
+      if (state.page < state.questionsArray.length / state.totalPerPage) {
         state.page++;
       }
     }
@@ -85,7 +89,7 @@ export default new Vuex.Store({
     },
     async fetchMoreQuestions (context) {
       context.commit('incrementPage');
-      // await context.dispatch('fetchQuestions');
+      await context.dispatch('fetchQuestions');
     }
   },
   modules: {
@@ -94,9 +98,9 @@ export default new Vuex.Store({
     serviceUrl: (state) => state.service_url,
     isOnline: (state) => state.online,
     mainState: (state) => state.value,
-    totalQuestions: (state) => state.questions.length,
+    totalQuestions: (state) => state.questionsArray.length,
     totalPerPage: (state) => state.totalPerPage,
     maxQuestions: (state) => state.totalPerPage * state.page,
-    questions: (state, getters) => state.questions.slice(0, getters.maxQuestions)
+    questions: (state, getters) => state.questionsArray.slice(0, getters.maxQuestions)
   }
 })
