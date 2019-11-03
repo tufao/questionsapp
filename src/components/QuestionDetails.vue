@@ -53,6 +53,8 @@ export default {
     position: fixed;
     top: 50%;
     left: 50%;
+    width: 80vw;
+    max-width: 800px;
     transform: translate(-50%, -50%);
     border: 1px solid #000;
     background-color: #fff;
@@ -62,6 +64,23 @@ export default {
     align-items: flex-start;
     justify-content: space-between;
     padding: 20px;
+
+    img {
+        width: 100%;
+    }
+
+    .title {
+        font-weight: bold;
+        margin-top: 20px;
+    }
+
+    .choices {
+        text-align: left;
+
+        button {
+            margin-left: 20px;
+        }
+    }
 
     .share {
         position: absolute;
