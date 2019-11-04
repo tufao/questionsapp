@@ -51,6 +51,10 @@ export default new Vuex.Store({
       state.questionsArray = Array.from(state.questions.values());
     },
 
+    updateQuestion (state, question) {
+      state.questions.set(question.id, question);
+    },
+
     incrementPage (state) {
       if (state.page < state.questionsArray.length / state.totalPerPage) {
         state.page++;
@@ -99,9 +103,31 @@ export default new Vuex.Store({
       });
     },
 
+    async fetchQuestionDetails (context, id) {
+      return new Promise((resolve, reject) => {
+        const url = `${context.state.service_url}/questions/${id}`;
+        axios.get(url)
+          .then((response) => {
+            context.commit('updateQuestion', response.data);
+            resolve(response.data);
+          })
+          .catch(() => {
+            resolve(null);
+          });
+      });
+    },
+
     async fetchMoreQuestions (context) {
-      await context.dispatch('fetchQuestions');
       context.commit('incrementPage');
+      await context.dispatch('fetchQuestions');
+    },
+
+    async getQuestionDetails (context, id) {
+      if (context.state.questions.has(id)) {
+        return context.state.questions.get(id);
+      }
+
+      return context.dispatch('fetchQuestionDetails', id);
     },
 
     filterQuestions (context, search) {

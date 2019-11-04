@@ -60,10 +60,9 @@ export default {
     }
   },
   methods: {
-    showDetails (id) {
-      this.selectedQuestion = this.questions.find((item) => {
-        return item.id === id;
-      });
+    async showDetails (id) {
+      this.selectedQuestion = await this.$store.dispatch('getQuestionDetails', id);
+
       if (this.question_id !== id) {
         this.$router.replace({ path: 'questions', query: { question_id: id } });
       }
