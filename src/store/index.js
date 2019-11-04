@@ -77,8 +77,7 @@ export default new Vuex.Store({
             context.commit('updateMainState');
             resolve();
           })
-          .catch((error) => {
-            console.log(error.statusText)
+          .catch(() => {
             context.commit('updateConnection', false);
             context.commit('updateMainState');
             resolve();
