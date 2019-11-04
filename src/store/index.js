@@ -13,7 +13,7 @@ export const MainState = {
 export default new Vuex.Store({
   state: {
     value: MainState.LOADING,
-    service_url: 'https://private-bbbe9-blissrecruitmentapi.apiary-mock.com/',
+    service_url: 'https://private-bbbe9-blissrecruitmentapi.apiary-mock.com',
     online: false,
 
     questions: new Map(),
@@ -49,6 +49,10 @@ export default new Vuex.Store({
         state.questions.set(entry.id, entry);
       });
       state.questionsArray = Array.from(state.questions.values());
+    },
+
+    updateQuestion (state, question) {
+      state.questions.set(question.id, question);
     },
 
     incrementPage (state) {
@@ -99,9 +103,31 @@ export default new Vuex.Store({
       });
     },
 
+    async fetchQuestionDetails (context, id) {
+      return new Promise((resolve, reject) => {
+        const url = `${context.state.service_url}/questions/${id}`;
+        axios.get(url)
+          .then((response) => {
+            context.commit('updateQuestion', response.data);
+            resolve(response.data);
+          })
+          .catch(() => {
+            resolve(null);
+          });
+      });
+    },
+
     async fetchMoreQuestions (context) {
-      await context.dispatch('fetchQuestions');
       context.commit('incrementPage');
+      await context.dispatch('fetchQuestions');
+    },
+
+    async getQuestionDetails (context, id) {
+      if (context.state.questions.has(id)) {
+        return context.state.questions.get(id);
+      }
+
+      return context.dispatch('fetchQuestionDetails', id);
     },
 
     filterQuestions (context, search) {
@@ -115,6 +141,21 @@ export default new Vuex.Store({
         axios.post(url, {
           destination_email: options.email,
           content_url: shareUrl
+        })
+          .then((result) => {
+            resolve(true);
+          })
+          .catch(() => {
+            resolve(false);
+          });
+      });
+    },
+
+    async sendQuestion (context, question) {
+      return new Promise((resolve, reject) => {
+        const url = `${context.state.service_url}/questions/${question.id}`;
+        axios.put(url, JSON.stringify(question), {
+          header: { 'Content-Type': 'application/json' }
         })
           .then((result) => {
             resolve(true);
