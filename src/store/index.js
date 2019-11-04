@@ -32,7 +32,9 @@ export default new Vuex.Store({
         case MainState.LOADING:
         case MainState.OFFLINE:
           if (state.online) {
-            state.value = MainState.READY;
+            setTimeout(() => {
+              state.value = MainState.READY;
+            }, 2000);
           } else {
             state.value = MainState.OFFLINE;
           }
@@ -75,8 +77,7 @@ export default new Vuex.Store({
             context.commit('updateMainState');
             resolve();
           })
-          .catch((error) => {
-            console.log(error.statusText)
+          .catch(() => {
             context.commit('updateConnection', false);
             context.commit('updateMainState');
             resolve();

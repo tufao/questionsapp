@@ -2,15 +2,19 @@
   <div>
     <div class="options">
       <div class="search">
-          <span>Search:</span>
-          <input type="text" v-model="search" placeholder="Search title.." />
-          <button @click="search=''">Clear</button>
+          <h3>Search:</h3>
+          <vi-input type="text" v-model="search" placeholder="Search title.." />
+          <vi-button warning small @click="search=''">Clear</vi-button>
       </div>
       <div @click="showShare=true" v-if="search!=''"><input type="image" alt="share" src="share-icon.png" width="35" /></div>
     </div>
     <QuestionsList :list="questions" :total="totalQuestions" @details="showDetails" />
-    <QuestionDetails v-if="selectedQuestion" :question="selectedQuestion" @close="closeDetails" @share="showShare=true" />
-    <ShareScreen v-if="showShare" @close="showShare=false" />
+    <transition name="fade">
+      <QuestionDetails v-if="selectedQuestion" :question="selectedQuestion" @close="closeDetails" @share="showShare=true" />
+    </transition>
+    <transition name="fade">
+      <ShareScreen v-if="showShare" @close="showShare=false" />
+    </transition>
   </div>
 </template>
 
@@ -87,7 +91,20 @@ export default {
 .options {
   display: flex;
   justify-content: space-between;
-  border: 2px solid green;
-  padding: 20px;
+  align-content: center;
+  align-items: center;
+  border: 2px solid #28A478;
+  border-radius: 10px;
+  padding: 10px;
+
+  .search {
+    display: flex;
+    align-items: center;
+  }
+
+  .search > * {
+    margin-right: 10px;
+    padding: 5px;
+  }
 }
 </style>

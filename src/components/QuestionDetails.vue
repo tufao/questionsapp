@@ -3,8 +3,8 @@
         <div class="overlay" />
         <div class="details">
             <img v-bind:src="question.image_url"/>
+            <span>{{ publishDate }}</span>
             <span class="title">Question:</span><span>{{ question.question }}</span>
-            <span class="title">Published at:</span><span>{{ publishDate }}</span>
             <span class="title">Choices:</span>
             <ul class="choices">
                 <li v-for="(choice, index) in question.choices" :key="index">
@@ -12,7 +12,7 @@
                     <button @click="vote(index)">Vote</button>
                 </li>
             </ul>
-            <button @click="$emit('close')">Close</button>
+            <vi-button dark small @click="$emit('close')">Close</vi-button>
             <input class="share" type="image" alt="share" src="share-icon.png" width="35" @click="$emit('share')" />
         </div>
     </div>
@@ -26,8 +26,12 @@ export default {
   },
   computed: {
     publishDate () {
-      const date = new Date(this.question.published_at);
-      return this.formatDate(date);
+      if (this.question.published_at) {
+        const date = new Date(this.question.published_at);
+        return this.formatDate(date);
+      } else {
+        return '';
+      }
     }
   },
   methods: {
@@ -59,9 +63,10 @@ export default {
     top: 50%;
     left: 50%;
     width: 80vw;
-    max-width: 800px;
+    max-width: 700px;
     transform: translate(-50%, -50%);
     border: 1px solid #000;
+    border-radius: 10px;
     background-color: #fff;
 
     display: flex;

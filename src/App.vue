@@ -1,11 +1,15 @@
 <template>
   <div id="app">
-    <div class="server-online-status" :class="{'status-on': isOnline, 'status-off': !isOnline}">Server </div>
-    <LoadingScreen v-if="mainState==MainState.LOADING" msg="Loading..."/>
-    <ErrorScreen v-else-if="mainState==MainState.OFFLINE"
-      msg="Its not possible to reach server, please try again later."
-      v-on:retry="retryConnect" />
-    <router-view v-else />
+    <div class="server-online-status">
+      <h3 :class="{'status-on': isOnline, 'status-off': !isOnline}">Server </h3>
+    </div>
+    <transition name="fade" mode="out-in">
+      <LoadingScreen v-if="mainState==MainState.LOADING" msg="Loading..."/>
+      <ErrorScreen v-else-if="mainState==MainState.OFFLINE"
+        msg="Its not possible to reach server, please try again later."
+        @retry="connect" />
+      <router-view v-else />
+    </transition>
   </div>
 </template>
 
@@ -39,10 +43,16 @@ export default {
   mounted () {
     // check connection health every 30 seconds
     setInterval(() => {
-      this.$store.dispatch('checkHealth');
+      this.connect();
     }, 30000);
 
-    this.$store.dispatch('checkHealth');
+    this.connect();
+  },
+
+  methods: {
+    async connect () {
+      await this.$store.dispatch('checkHealth');
+    }
   }
 }
 </script>
@@ -70,13 +80,17 @@ export default {
 }
 
 .server-online-status {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+  display: block;
+  text-align: right;
+  top: 0px;
+  right: 0px;
+  width: 100%;
+  background-color: white;
+  padding-right: 20px;
 }
 
 .status-on {
-  color: green;
+  color: #28A478;
 }
 
 .status-on:after {
@@ -84,7 +98,7 @@ export default {
 }
 
 .status-off {
-  color: red;
+  color: #E45151;
 }
 
 .status-off:after {
@@ -98,5 +112,15 @@ export default {
   top: 0px;
   left: 0px;
   background-color:rgba(100, 100, 100, .8);
+}
+
+.fade-enter-active {
+  transition: all 1s ease;
+}
+.fade-leave-active {
+  transition: all .5s ease;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 </style>

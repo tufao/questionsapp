@@ -1,6 +1,7 @@
 <template>
   <div class="loading">
-    {{ msg }}
+    <h2>{{ msg }}</h2>
+    <vi-loading small />
   </div>
 </template>
 
@@ -16,8 +17,13 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .loading {
-  font-size: 18pt;
-  background-color: lightgray;
+  position: absolute;
+  width: 100%;
+  top: 20%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 2em;
   color: black;
 }
 </style>

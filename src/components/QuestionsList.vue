@@ -1,10 +1,11 @@
 <template>
   <div class="questions">
-      <div class="question" v-for="item in list" :key="item.id" @click="$emit('details', item.id)">
-        <span>{{ item.id }}. </span>
-        <img v-bind:src="item.thumb_url"/>
-        <span>{{ item.question }}</span>
-      </div>
+    <h2 class="title">Results</h2>
+    <div class="question" v-for="item in list" :key="item.id" @click="$emit('details', item.id)">
+      <span>{{ item.id }}. </span>
+      <img v-bind:src="item.thumb_url"/>
+      <span>{{ item.question }}</span>
+    </div>
   </div>
 </template>
 
@@ -53,9 +54,19 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+.title {
+  display: block;
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #aaa;
+}
+
 .questions {
   div:nth-child(even) {
     background-color: lightgray;
+  }
+  div:hover {
+    background-color: #aaa;
   }
 }
 
@@ -63,11 +74,15 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 20px;
+  padding: 10px;
 
   span {
     vertical-align: middle;
-    padding: 20px;
+    padding: 10px;
+  }
+
+  img {
+    height: 40px;
   }
 }
 </style>
