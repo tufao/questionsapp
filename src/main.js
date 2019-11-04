@@ -4,10 +4,13 @@ import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import App from './App.vue';
 import router from './router';
+import 'vue-vi-ui/dist/vi-ui.min.css';
+import ViUi from 'vue-vi-ui';
 
 const mock = new MockAdapter(axios);
 
 Vue.config.productionTip = false;
+Vue.use(ViUi);
 
 /* eslint-disable-next-line no-undef */
 if (DEBUG) {
