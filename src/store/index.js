@@ -124,6 +124,9 @@ export default new Vuex.Store({
     },
 
     async getQuestionDetails (context, id) {
+      if (id == null) {
+        return null;
+      }
       if (context.state.questions.has(id)) {
         return context.state.questions.get(id);
       }
