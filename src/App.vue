@@ -4,7 +4,7 @@
     <LoadingScreen v-if="mainState==MainState.LOADING" msg="Loading..."/>
     <ErrorScreen v-else-if="mainState==MainState.OFFLINE"
       msg="Its not possible to reach server, please try again later."
-      v-on:retry="retryConnect" />
+      @retry="connect" />
     <router-view v-else />
   </div>
 </template>
@@ -39,10 +39,16 @@ export default {
   mounted () {
     // check connection health every 30 seconds
     setInterval(() => {
-      this.$store.dispatch('checkHealth');
+      this.connect();
     }, 30000);
 
-    this.$store.dispatch('checkHealth');
+    this.connect();
+  },
+
+  methods: {
+    async connect () {
+      await this.$store.dispatch('checkHealth');
+    }
   }
 }
 </script>
@@ -70,9 +76,9 @@ export default {
 }
 
 .server-online-status {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+  display: block;
+  position: relative;
+  text-align: right;
 }
 
 .status-on {
