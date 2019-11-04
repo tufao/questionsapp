@@ -17,9 +17,9 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .loading {
-  position: fixed;
+  position: absolute;
   width: 100%;
-  top: 30%;
+  top: 20%;
   display: flex;
   flex-direction: column;
   align-items: center;

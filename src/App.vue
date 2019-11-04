@@ -3,11 +3,13 @@
     <div class="server-online-status">
       <h3 :class="{'status-on': isOnline, 'status-off': !isOnline}">Server </h3>
     </div>
-    <LoadingScreen v-if="mainState==MainState.LOADING" msg="Loading..."/>
-    <ErrorScreen v-else-if="mainState==MainState.OFFLINE"
-      msg="Its not possible to reach server, please try again later."
-      @retry="connect" />
-    <router-view v-else />
+    <transition name="fade" mode="out-in">
+      <LoadingScreen v-if="mainState==MainState.LOADING" msg="Loading..."/>
+      <ErrorScreen v-else-if="mainState==MainState.OFFLINE"
+        msg="Its not possible to reach server, please try again later."
+        @retry="connect" />
+      <router-view v-else />
+    </transition>
   </div>
 </template>
 
@@ -110,5 +112,15 @@ export default {
   top: 0px;
   left: 0px;
   background-color:rgba(100, 100, 100, .8);
+}
+
+.fade-enter-active {
+  transition: all 1s ease;
+}
+.fade-leave-active {
+  transition: all .5s ease;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 </style>

@@ -21,16 +21,12 @@ export default {
 <style scoped lang="scss">
 .error {
   display: inline-block;
-  width: 50%;
 }
 
 .content {
-  position: fixed;
+  margin-top: 30%;
   width: 320px;
   height: 240px;
-  top: 30%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   display: flex;
   height: 150px;
   flex-direction: column;

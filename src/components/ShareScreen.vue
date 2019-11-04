@@ -60,7 +60,7 @@ export default {
 
 <style scoped lang="scss">
 .form {
-    position: fixed;
+    position: absolute;
     width: 320px;
     top: 50%;
     left: 50%;
