@@ -1,8 +1,9 @@
 <template>
   <div class="error">
-    <div class="content">
+    <div class="content ViColor-success--border">
       <span>{{ msg }}</span>
-      <button @click="$emit('retry')">RETRY</button>
+      <vi-button @click="$emit('retry')" pill success outlined justify-content="space-between" width="100">
+        <span>▸</span> Retry</vi-button>
     </div>
   </div>
 </template>
@@ -20,18 +21,25 @@ export default {
 <style scoped lang="scss">
 .error {
   display: inline-block;
-  font-size: 18pt;
-  background-color: lightgray;
   width: 50%;
-  padding: 20px;
 }
 
 .content {
+  position: fixed;
+  width: 320px;
+  height: 240px;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   height: 150px;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
-  font-size: 15pt;
+  padding: 20px;
+  font-size: 1.5em;
+  background-color: #fff;
+  border: 2px solid #28A478;
+  border-radius: 10px;
 }
 </style>

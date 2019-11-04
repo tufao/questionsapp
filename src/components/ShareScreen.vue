@@ -1,14 +1,17 @@
 <template>
-    <div>
-        <div class="overlay" />
-        <div class="form">
-            <span class="title">Share by email:</span>
-            <div><input type="email" text="" v-model="email" />
-                <button @click="shareSearch" :disabled="sending">Share</button></div>
-            <span :class="{error: shareError}" class="message">{{ shareMessage }}</span>
-            <button @click="$emit('close')">Close</button>
-        </div>
+  <div>
+    <div class="overlay" />
+    <div class="form">
+      <img class="share" alt="share" src="share-icon.png" />
+      <h2 class="title">Share by email</h2>
+      <div class="email">
+        <vi-input type="email" text="" v-model="email" />
+        <vi-button success small @click="shareSearch" :disabled="sending">Share</vi-button>
+      </div>
+      <span :class="{error: shareError}" class="message">{{ shareMessage }}</span>
+      <vi-button class="close" dark small @click="$emit('close')">Close</vi-button>
     </div>
+  </div>
 </template>
 
 <script>
@@ -59,28 +62,43 @@ export default {
 .form {
     position: fixed;
     width: 320px;
-    height: 240px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 
     border: 1px solid #000;
+    border-radius: 10px;
     background-color: #fff;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
+    padding: 20px;
 
-    .title {
-        font-size: 24pt;
+    .email {
+      display: flex;
     }
 
     .message {
-        font-size: 10pt;
+      font-size: .8em;
+      text-align: left;
+      line-height: 2em;
+      height: 2em;
     }
 
     .error {
-        color: red;
+      color: red;
     }
+
+    .close {
+      margin-top: 10px;
+    }
+}
+
+.share {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 25px;
 }
 </style>
